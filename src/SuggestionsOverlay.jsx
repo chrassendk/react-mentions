@@ -31,7 +31,7 @@ module.exports = React.createClass({
     if(this.countSuggestions() === 0) return null;
 
     return (
-      <div className="suggestions" onMouseDown={this.props.onMouseDown}>
+      <div className="suggestions" ref="searchResults" onMouseDown={this.props.onMouseDown}>
         <ul>{ this.renderSuggestions() }</ul>
       </div>
     );
@@ -120,6 +120,13 @@ module.exports = React.createClass({
     this.setState({
       focusIndex: (suggestionsCount + this.state.focusIndex + delta) % suggestionsCount
     });
+  
+    var searchResult = this.refs.focused.getDOMNode();
+    var searchResultsDiv = this.refs.searchResults.getDOMNode();
+    var previousScrollTop = searchResultsDiv.scrollTop;
+    var diff = searchResult.getBoundingClientRect().bottom - searchResultsDiv.clientHeight - searchResultsDiv.getBoundingClientRect().top;
+    searchResultsDiv.scrollTop = previousScrollTop + diff;
+    
   },
 
   countSuggestions: function(props) {
