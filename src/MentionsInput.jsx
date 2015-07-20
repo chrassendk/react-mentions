@@ -421,7 +421,6 @@ module.exports = React.createClass({
     if(!suggestionsEl) return;
 
     suggestionsEl.style.left = caretEl.offsetLeft - highligherEl.scrollLeft + "px";
-    //suggestionsEl.style.top = caretEl.offsetTop - highligherEl.scrollTop + "px";
     var bottom = highligherEl.offsetHeight + "px";
     suggestionsEl.style.bottom = bottom;
   },
