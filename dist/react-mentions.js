@@ -649,6 +649,16 @@ module.exports = React.createClass({
     });
   },
 
+  componentDidUpdate: function() {
+    if(this.refs.focused && this.refs.searchResults) {
+      var searchResult = this.refs.focused.getDOMNode();
+      var searchResultsDiv = this.refs.searchResults.getDOMNode();
+      var previousScrollTop = searchResultsDiv.scrollTop;
+      var diff = searchResult.getBoundingClientRect().bottom - searchResultsDiv.clientHeight - searchResultsDiv.getBoundingClientRect().top;
+      searchResultsDiv.scrollTop = previousScrollTop + diff;
+    }
+  },
+
   render: function() {
     // do not show suggestions until there is some data
     if(this.countSuggestions() === 0) return null;
@@ -743,13 +753,6 @@ module.exports = React.createClass({
     this.setState({
       focusIndex: (suggestionsCount + this.state.focusIndex + delta) % suggestionsCount
     });
-  
-    var searchResult = this.refs.focused.getDOMNode();
-    var searchResultsDiv = this.refs.searchResults.getDOMNode();
-    var previousScrollTop = searchResultsDiv.scrollTop;
-    var diff = searchResult.getBoundingClientRect().bottom - searchResultsDiv.clientHeight - searchResultsDiv.getBoundingClientRect().top;
-    searchResultsDiv.scrollTop = previousScrollTop + diff;
-    
   },
 
   countSuggestions: function(props) {
