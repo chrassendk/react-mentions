@@ -422,7 +422,8 @@ module.exports = React.createClass({
 
     suggestionsEl.style.left = caretEl.offsetLeft - highligherEl.scrollLeft + "px";
     //suggestionsEl.style.top = caretEl.offsetTop - highligherEl.scrollTop + "px";
-    suggestionsEl.style.bottom = highligherEl.clientHeight || highligherEl.offsetHeight;
+    var bottom = highligherEl.offsetHeight + "px";
+    suggestionsEl.style.bottom = bottom;
   },
 
   updateHighlighterScroll: function() {
