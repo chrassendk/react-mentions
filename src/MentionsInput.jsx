@@ -297,7 +297,6 @@ module.exports = React.createClass({
 
   // Handle input element's change event
   handleChange: function(ev) {
-
     if(document.activeElement !== ev.target) {
       // fix an IE bug (blur from empty input element with placeholder attribute trigger "input" event)
       return;
@@ -514,7 +513,6 @@ module.exports = React.createClass({
     var provideData = _getDataProvider(mentionDescriptor.props.data);
     var snycResult = provideData(query, this.updateSuggestions.bind(null, this._queryId, mentionDescriptor, query, querySequenceStart, querySequenceEnd, plainTextValue));
     if(snycResult instanceof Array) {
-      console.log('sr', snycResult);
       this.updateSuggestions(this._queryId, mentionDescriptor, query, querySequenceStart, querySequenceEnd, plainTextValue, snycResult);
     }
   },

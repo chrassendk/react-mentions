@@ -255,7 +255,6 @@ module.exports = React.createClass({
       if(utils.isNumber(caretPositionInMarkup) && caretPositionInMarkup >= index && caretPositionInMarkup <= index + substr.length) {
         // if yes, split substr at the caret position and insert the caret component
         var splitIndex = caretPositionInMarkup - index;
-        console.log('delete');
         components.push(substr.substring(0, splitIndex));
 
         // add all following substrings and mention components as children of the caret component
