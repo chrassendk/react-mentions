@@ -7,6 +7,11 @@ var utils = require('./utils');
 var Mention = require('./Mention');
 var SuggestionsOverlay = require('./SuggestionsOverlay');
 
+if (typeof String.prototype.startsWith != 'function') {
+  String.prototype.startsWith = function (str){
+    return this.slice(0, str.length) == str;
+  };
+}
 
 var _generateComponentKey = function(usedKeys, id) {
   if(!usedKeys.hasOwnProperty(id)) {
@@ -36,7 +41,7 @@ var _getDataProvider = function(data) {
       var results = [];
       for(var i=0, l=data.length; i < l; ++i) {
         var display = data[i].display || data[i].id;
-        if(display.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+        if(display.toLowerCase().startsWith(query.toLowerCase())) {
           results.push(data[i]);
         }
       }
@@ -509,6 +514,7 @@ module.exports = React.createClass({
     var provideData = _getDataProvider(mentionDescriptor.props.data);
     var snycResult = provideData(query, this.updateSuggestions.bind(null, this._queryId, mentionDescriptor, query, querySequenceStart, querySequenceEnd, plainTextValue));
     if(snycResult instanceof Array) {
+      console.log('sr', snycResult);
       this.updateSuggestions(this._queryId, mentionDescriptor, query, querySequenceStart, querySequenceEnd, plainTextValue, snycResult);
     }
   },
