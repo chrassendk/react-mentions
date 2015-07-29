@@ -22,7 +22,6 @@ module.exports = React.createClass({
      * ```
      */
     onAdd: React.PropTypes.func,
-
     renderSuggestion: React.PropTypes.func,
 
   },
