@@ -1000,10 +1000,12 @@ module.exports = {
   applyChangeToValue: function(value, markup, plainTextValue, selectionStartBeforeChange, selectionEndBeforeChange, selectionEndAfterChange, displayTransform) {
     // extract the insertion from the new plain text value
     var insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
-    if(insert == "" && selectionStartBeforeChange == selectionEndBeforeChange == selectionEndAfterChange) {
-      selectionStartBeforeChange = selectionStartBeforeChange - 1;
-       insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);  
-    }
+console.log('insert, ', insert, selectionStartBeforeChange, selectionEndBeforeChange, selectionEndAfterChange, value.length, plainTextValue.length);
+  
+      if(insert == "" && selectionStartBeforeChange == selectionEndBeforeChange == selectionEndAfterChange) {
+        selectionStartBeforeChange = selectionStartBeforeChange - 1;
+         insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);  
+      }
     // handling for Backspace key with no range selection
     var spliceStart = Math.min(selectionStartBeforeChange, selectionEndAfterChange);
 
