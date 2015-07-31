@@ -307,6 +307,7 @@ module.exports = React.createClass({
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
+    console.log('npvv', newPlainTextValue);
     // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
       value, this.props.markup,
@@ -322,6 +323,8 @@ module.exports = React.createClass({
     // Save current selection after change to be able to restore caret position after rerendering
     var selectionStart = this.refs.input.getDOMNode().selectionStart;
     var selectionEnd = this.refs.input.getDOMNode().selectionEnd;
+console.log('SELECTION START END', selectionStart, selectionEnd);
+      
 
     // Adjust selection range in case a mention will be deleted by the characters outside of the
     // selection range that are automatically deleted
@@ -329,16 +332,20 @@ module.exports = React.createClass({
     
     if(this.state.selectionEnd > startOfMention && ((this.state.selectionEnd - startOfMention) > 2)) {
       // only if a deletion has taken place
+      console.log('AAAAAAAAA');
       selectionStart = startOfMention;
       selectionEnd = selectionStart;
     }
 
     var mentions = utils.getMentions(newValue, this.props.markup);
+
+
     this.setState({
       selectionStart: selectionStart,
       selectionEnd: selectionEnd,
       changedMention: beforeMentions.length !== mentions.length
     });
+    console.log('nv', newValue);
     // Propagate change
     var handleChange = LinkedValueUtils.getOnChange(this) || emptyFunction;
     var eventMock = { target: { value: newValue } };
