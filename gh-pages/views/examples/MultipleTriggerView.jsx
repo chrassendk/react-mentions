@@ -31,6 +31,7 @@ module.exports = React.createClass({
 
         <MentionsInput
           value={this.state.value}
+            onKeyDown={this.onKeyDown}
           onChange={this.handleChange}
           markup="@[__display__](__type__:__id__)"
           placeholder={"Mention people using '@'"}>
@@ -50,6 +51,13 @@ module.exports = React.createClass({
         </MentionsInput>
       </div>
     );
+  },
+
+  onKeyDown: function(event) {
+    // Close tip
+    if(event.keyCode == 13 ) {
+      alert(event.target.value);
+    }
   },
 
   key: function(e) {
