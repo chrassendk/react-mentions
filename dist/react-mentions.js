@@ -143,8 +143,7 @@ module.exports = React.createClass({
     return {
       selectionStart: null,
       selectionEnd: null,
-      addedMention: true,
-      removedMention: false,
+      changedMention: true,
 
       suggestions: {}
     };
@@ -176,7 +175,7 @@ module.exports = React.createClass({
 
   renderInput: function(props) {
    
-    if (this.state.addedMention || this.state.removedMention || this.props.value.length == 0) {
+    if (this.state.changedMention) {
       props.value = this.getPlainText();
     }
     
@@ -197,12 +196,6 @@ module.exports = React.createClass({
       font: "inherit"
     };
 
-    if(this.props.singleLine) {
-      style.width = "inherit";
-      return (
-        React.createElement("input", React.__spread({type: "text"},   props , {ref: "input", style: style}))
-      );
-    }
 
     style.width = "100%";
     style.bottom = 0;
@@ -356,12 +349,12 @@ module.exports = React.createClass({
     }
 
     var value = LinkedValueUtils.getValue(this) || "";
-
-
+    
     var beforeMentions = utils.getMentions(value, this.props.markup);
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
+    console.log('npvv', newPlainTextValue);
     // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
       value, this.props.markup,
@@ -381,11 +374,12 @@ module.exports = React.createClass({
     // Adjust selection range in case a mention will be deleted by the characters outside of the
     // selection range that are automatically deleted
     var startOfMention = utils.findStartOfMentionInPlainText(value, this.props.markup, selectionStart, this.props.displayTransform);
-    if(this.state.selectionEnd > startOfMention) {
-      // only if a deletion has taken place
-      selectionStart = startOfMention;
-      selectionEnd = selectionStart;
-    }
+    // if(this.state.selectionEnd > startOfMention) {
+    //   // only if a deletion has taken place
+    //   console.log('AAAAAAAAA');
+    //   selectionStart = startOfMention;
+    //   selectionEnd = selectionStart;
+    // }
 
     var mentions = utils.getMentions(newValue, this.props.markup);
 
@@ -393,10 +387,9 @@ module.exports = React.createClass({
     this.setState({
       selectionStart: selectionStart,
       selectionEnd: selectionEnd,
-      addedMention: false,
-      removedMention: beforeMentions.length !== mentions.length
+      changedMention: beforeMentions.length !== mentions.length
     });
-    
+    console.log('nv', newValue);
     // Propagate change
     var handleChange = LinkedValueUtils.getOnChange(this) || emptyFunction;
     var eventMock = { target: { value: newValue } };
@@ -510,7 +503,7 @@ module.exports = React.createClass({
 
     // maintain selection in case a mention is added/removed causing
     // the cursor to jump to the end
-    if (this.state.addedMention || this.state.removedMention || this.props.value.length == 0) {
+    if (this.state.changedMention) {
       this.setSelection(this.state.selectionStart, this.state.selectionEnd);
     }
   },
@@ -615,8 +608,7 @@ module.exports = React.createClass({
     this.setState({
       selectionStart: newCaretPosition,
       selectionEnd: newCaretPosition,
-      addedMention: true,
-      removedMention: false
+      changedMention: true
     });
 
     // Propagate change
@@ -1012,18 +1004,26 @@ module.exports = {
   applyChangeToValue: function(value, markup, plainTextValue, selectionStartBeforeChange, selectionEndBeforeChange, selectionEndAfterChange, displayTransform) {
     // extract the insertion from the new plain text value
     var insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
-
+console.log('insert, ', insert);
     // handling for Backspace key with no range selection
     var spliceStart = Math.min(selectionStartBeforeChange, selectionEndAfterChange);
 
     var spliceEnd = selectionEndBeforeChange;
     if(selectionStartBeforeChange === selectionEndAfterChange) {
       var oldPlainTextValue = this.getPlainText(value, markup, displayTransform);
+
+      console.log('EQUAL =  ', oldPlainTextValue);
+
       var lengthDelta = oldPlainTextValue.length - plainTextValue.length;
       // handling for Delete key with no range selection
       spliceEnd = Math.max(selectionEndBeforeChange, selectionStartBeforeChange + lengthDelta);
     }
-    
+    console.log("splaice " , 
+      value,
+      this.mapPlainTextIndex(value, markup, spliceStart, false, displayTransform),
+      this.mapPlainTextIndex(value, markup, spliceEnd, true, displayTransform),
+      insert
+    );
     // splice the current marked up value and insert new chars
     return this.spliceString(
       value,
