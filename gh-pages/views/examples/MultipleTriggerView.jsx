@@ -52,6 +52,10 @@ module.exports = React.createClass({
     );
   },
 
+  key: function(e) {
+    console.log(e);
+  },
+
   handleRemove: function() {
     console.log("removed a mention", arguments);
   },

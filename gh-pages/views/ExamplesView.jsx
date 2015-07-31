@@ -33,7 +33,8 @@ module.exports = React.createClass({
           <div className="col-md-6">
             <SingleLine data={ users } />
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6">ッッッk＜＜テxt
+          <textarea>kkkk</textarea>
             <Advanced data={ users } />
           </div>
         </div>

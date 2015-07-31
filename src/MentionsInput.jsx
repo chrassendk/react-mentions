@@ -55,7 +55,6 @@ var _getDataProvider = function(data) {
 
 var KEY = { TAB : 9, RETURN : 13, ESC : 27, UP : 38, DOWN : 40 };
 
-
 module.exports = React.createClass({
 
   displayName: 'MentionsInput',
@@ -87,6 +86,7 @@ module.exports = React.createClass({
         return display;
       },
       onKeyDown: emptyFunction,
+      onKeyUp: emptyFunction,
       onSelect: emptyFunction,
       onBlur: emptyFunction
     };
@@ -96,6 +96,8 @@ module.exports = React.createClass({
     return {
       selectionStart: null,
       selectionEnd: null,
+      addedMention: true,
+      removedMention: false,
 
       suggestions: {}
     };
@@ -106,7 +108,7 @@ module.exports = React.createClass({
       singleLine,
       className,
 
-      markup, displayTransform, onKeyDown, onSelect, onBlur, onChange,
+      markup, displayTransform, onKeyDown, onKeyUp, onSelect, onBlur, onChange,
       children, value, valueLink,
 
       ...inputProps
@@ -126,13 +128,17 @@ module.exports = React.createClass({
   },
 
   renderInput: function(props) {
-    props.value = this.getPlainText();
-
+   
+    if (this.state.addedMention || this.state.removedMention) {
+      props.value = this.getPlainText();
+    }
+    
     if(!this.props.readOnly && !this.props.disabled) {
-      props.onChange = this.handleChange;
-      props.onSelect = this.handleSelect;
-      props.onKeyDown = this.handleKeyDown;
-      props.onBlur = this.handleBlur;
+     props.onChange = this.handleChange;
+     props.onSelect = this.handleSelect;
+     props.onKeyDown = this.handleKeyDown;
+     props.onKeyUp = this.handleKeyUp;
+     props.onBlur = this.handleBlur;
     }
 
     var style = {
@@ -296,21 +302,25 @@ module.exports = React.createClass({
   },
 
   // Handle input element's change event
-  handleChange: function(ev) {
-    if(document.activeElement !== ev.target) {
+  handleChange: function() {
+    if(document.activeElement !== this.refs.input.getDOMNode()) {
       // fix an IE bug (blur from empty input element with placeholder attribute trigger "input" event)
       return;
     }
 
     var value = LinkedValueUtils.getValue(this) || "";
-    var newPlainTextValue = ev.target.value;
+
+
+    var beforeMentions = utils.getMentions(value, this.props.markup);
+
+    var newPlainTextValue = this.refs.input.getDOMNode().value;
 
     // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
       value, this.props.markup,
       newPlainTextValue,
       this.state.selectionStart, this.state.selectionEnd,
-      ev.target.selectionEnd,
+      this.refs.input.getDOMNode().selectionEnd,
       this.props.displayTransform
     );
 
@@ -318,8 +328,8 @@ module.exports = React.createClass({
     newPlainTextValue = utils.getPlainText(newValue, this.props.markup, this.props.displayTransform);
 
     // Save current selection after change to be able to restore caret position after rerendering
-    var selectionStart = ev.target.selectionStart;
-    var selectionEnd = ev.target.selectionEnd;
+    var selectionStart = this.refs.input.getDOMNode().selectionStart;
+    var selectionEnd = this.refs.input.getDOMNode().selectionEnd;
 
     // Adjust selection range in case a mention will be deleted by the characters outside of the
     // selection range that are automatically deleted
@@ -330,17 +340,21 @@ module.exports = React.createClass({
       selectionEnd = selectionStart;
     }
 
-    this.setState({
-      selectionStart: selectionStart,
-      selectionEnd: selectionEnd
-    });
-
     var mentions = utils.getMentions(newValue, this.props.markup);
 
+
+    this.setState({
+      selectionStart: selectionStart,
+      selectionEnd: selectionEnd,
+      addedMention: false,
+      removedMention: beforeMentions.length !== mentions.length
+    });
+    
     // Propagate change
     var handleChange = LinkedValueUtils.getOnChange(this) || emptyFunction;
     var eventMock = { target: { value: newValue } };
     handleChange.call(this, eventMock, newValue, newPlainTextValue, mentions);
+
   },
 
   // Handle input element's select event
@@ -361,13 +375,11 @@ module.exports = React.createClass({
 
     // sync highlighters scroll position
     this.updateHighlighterScroll();
-
     this.props.onSelect(ev);
   },
 
   handleKeyDown: function(ev) {
     var keyHandlers = {};
-
     // do not intercept key events if the suggestions overlay is not shown
     var suggestionsCount = 0;
     for(var prop in this.state.suggestions) {
@@ -387,11 +399,13 @@ module.exports = React.createClass({
 
     if(keyHandlers[ev.keyCode]) {
       keyHandlers[ev.keyCode]();
-      ev.preventDefault();
-    } else {
+      ev.preventDefault(); 
+    } 
+    else {
       this.props.onKeyDown(ev);
     }
   },
+  
 
   handleBlur: function(ev) {
     // only reset selection if the mousdown happened on an element
@@ -449,7 +463,9 @@ module.exports = React.createClass({
 
     // maintain selection in case a mention is added/removed causing
     // the cursor to jump to the end
-    this.setSelection(this.state.selectionStart, this.state.selectionEnd);
+    if (this.state.addedMention || this.state.removedMention) {
+      this.setSelection(this.state.selectionStart, this.state.selectionEnd);
+    }
   },
 
   setSelection: function(selectionStart, selectionEnd) {
@@ -551,7 +567,9 @@ module.exports = React.createClass({
     var newCaretPosition = querySequenceStart + displayValue.length;
     this.setState({
       selectionStart: newCaretPosition,
-      selectionEnd: newCaretPosition
+      selectionEnd: newCaretPosition,
+      addedMention: true,
+      removedMention: false
     });
 
     // Propagate change

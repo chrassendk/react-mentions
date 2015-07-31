@@ -23,7 +23,6 @@ module.exports = React.createClass({
      * ```
      */
     onAdd: React.PropTypes.func,
-
     renderSuggestion: React.PropTypes.func,
 
   },
@@ -415,10 +414,11 @@ module.exports = React.createClass({
 
   handleKeyDown: function(ev) {
     var keyHandlers = {};
-
     // do not intercept key events if the suggestions overlay is not shown
     var suggestionsCount = 0;
     for(var prop in this.state.suggestions) {
+
+console.log(ev);
       if(this.state.suggestions.hasOwnProperty(prop)) {
         suggestionsCount += this.state.suggestions[prop].results.length;
       }
@@ -434,9 +434,13 @@ module.exports = React.createClass({
     }
 
     if(keyHandlers[ev.keyCode]) {
+
+console.log('sss');
       keyHandlers[ev.keyCode]();
-      ev.preventDefault();
+      //ev.preventDefault();
     } else {
+
+console.log('sss１');
       this.props.onKeyDown(ev);
     }
   },
