@@ -175,7 +175,7 @@ module.exports = React.createClass({
 
   renderInput: function(props) {
    
-    if (this.state.changedMention) {
+    if (this.state.changedMention || this.props.value.length == 0) {
       props.value = this.getPlainText();
     }
     
