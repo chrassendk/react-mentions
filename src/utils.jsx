@@ -215,38 +215,24 @@ module.exports = {
   applyChangeToValue: function(value, markup, plainTextValue, selectionStartBeforeChange, selectionEndBeforeChange, selectionEndAfterChange, displayTransform) {
     // extract the insertion from the new plain text value
     var insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
-  
+
+  if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {  
     if(insert == "" && selectionStartBeforeChange == selectionEndAfterChange) {
       selectionStartBeforeChange = selectionEndBeforeChange - 1;
-     insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
-
+      insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
     }
+  }
     // handling for Backspace key with no range selection
     var spliceStart = Math.min(selectionStartBeforeChange, selectionEndAfterChange);
 
     var spliceEnd = selectionEndBeforeChange;
     if(selectionStartBeforeChange === selectionEndAfterChange) {
       var oldPlainTextValue = this.getPlainText(value, markup, displayTransform);
-
-      console.log('EQUAL =  ', oldPlainTextValue);
-
       var lengthDelta = oldPlainTextValue.length - plainTextValue.length;
       // handling for Delete key with no range selection
       spliceEnd = Math.max(selectionEndBeforeChange, selectionStartBeforeChange + lengthDelta);
     }
 
-// if(insert === "" && (spliceStart - spliceEnd) == 0)  {
-//   console.log('XXXXXXXX');
-//   spliceStart = spliceStart -1;
-//   spliceEnd = spliceEnd ;
-// }
-
-    console.log("splaice " , 
-      value,
-      this.mapPlainTextIndex(value, markup, spliceStart, false, displayTransform),
-      this.mapPlainTextIndex(value, markup, spliceEnd, true, displayTransform),
-      insert
-    );
     // splice the current marked up value and insert new chars
     return this.spliceString(
       value,
