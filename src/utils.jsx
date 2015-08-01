@@ -219,7 +219,8 @@ module.exports = {
   if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {  
     if(insert == "" && selectionStartBeforeChange == selectionEndAfterChange) {
       selectionStartBeforeChange = selectionEndBeforeChange - 1;
-      insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
+     insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
+
     }
   }
     // handling for Backspace key with no range selection
@@ -232,7 +233,6 @@ module.exports = {
       // handling for Delete key with no range selection
       spliceEnd = Math.max(selectionEndBeforeChange, selectionStartBeforeChange + lengthDelta);
     }
-
     // splice the current marked up value and insert new chars
     return this.spliceString(
       value,

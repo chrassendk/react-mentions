@@ -354,6 +354,7 @@ module.exports = React.createClass({
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
+    console.log('npvv', newPlainTextValue);
     // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
       value, this.props.markup,
@@ -375,14 +376,12 @@ module.exports = React.createClass({
     // selection range that are automatically deleted
     var startOfMention = utils.findStartOfMentionInPlainText(value, this.props.markup, selectionStart, this.props.displayTransform);
     
-    if(this.state.selectionEnd > startOfMention && ((this.state.selectionEnd - startOfMention) > 5)) {
+    var mentions = utils.getMentions(newValue, this.props.markup);
+    if(this.state.selectionEnd > startOfMention && beforeMentions.length !== mentions.length) {
       // only if a deletion has taken place
       selectionStart = startOfMention;
       selectionEnd = selectionStart;
     }
-
-    var mentions = utils.getMentions(newValue, this.props.markup);
-
 
     this.setState({
       selectionStart: selectionStart,
@@ -1008,7 +1007,8 @@ module.exports = {
   if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {  
     if(insert == "" && selectionStartBeforeChange == selectionEndAfterChange) {
       selectionStartBeforeChange = selectionEndBeforeChange - 1;
-      insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
+     insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
+
     }
   }
     // handling for Backspace key with no range selection
@@ -1021,7 +1021,6 @@ module.exports = {
       // handling for Delete key with no range selection
       spliceEnd = Math.max(selectionEndBeforeChange, selectionStartBeforeChange + lengthDelta);
     }
-
     // splice the current marked up value and insert new chars
     return this.spliceString(
       value,
