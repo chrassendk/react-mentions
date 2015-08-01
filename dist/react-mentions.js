@@ -354,7 +354,6 @@ module.exports = React.createClass({
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
-    console.log('npvv', newPlainTextValue);
     // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
       value, this.props.markup,
