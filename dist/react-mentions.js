@@ -354,6 +354,7 @@ module.exports = React.createClass({
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
+
     // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
       value, this.props.markup,
@@ -1005,7 +1006,7 @@ module.exports = {
 
   if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {  
     if(insert == "" && selectionStartBeforeChange == selectionEndAfterChange) {
-      selectionStartBeforeChange = selectionEndBeforeChange - 1;
+      selectionStartBeforeChange = selectionEndBeforeChange - 2;
      insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
 
     }
@@ -1016,10 +1017,13 @@ module.exports = {
     var spliceEnd = selectionEndBeforeChange;
     if(selectionStartBeforeChange === selectionEndAfterChange) {
       var oldPlainTextValue = this.getPlainText(value, markup, displayTransform);
+
+   
       var lengthDelta = oldPlainTextValue.length - plainTextValue.length;
       // handling for Delete key with no range selection
       spliceEnd = Math.max(selectionEndBeforeChange, selectionStartBeforeChange + lengthDelta);
     }
+
     // splice the current marked up value and insert new chars
     return this.spliceString(
       value,

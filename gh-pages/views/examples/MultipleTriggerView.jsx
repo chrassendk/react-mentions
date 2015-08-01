@@ -32,7 +32,7 @@ module.exports = React.createClass({
         <MentionsInput
           value={this.state.value}
             onKeyDown={this.onKeyDown}
-          onChange={this.handleChange}
+            onChange={this.handleChange}
           markup="@[__display__](__type__:__id__)"
           placeholder={"Mention people using '@'"}>
 
