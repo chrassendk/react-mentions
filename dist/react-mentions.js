@@ -344,9 +344,7 @@ module.exports = React.createClass({
 
   // Handle input element's change event
   handleChange: function() {
-    if(Object.keys(this.state.suggestions).length > 0) {
-      return;
-    }
+   
     if(document.activeElement !== this.refs.input.getDOMNode()) {
       // fix an IE bug (blur from empty input element with placeholder attribute trigger "input" event)
       return;

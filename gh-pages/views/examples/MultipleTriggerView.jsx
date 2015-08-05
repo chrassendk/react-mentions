@@ -24,6 +24,16 @@ module.exports = React.createClass({
   },
 
   render: function() {
+var mention;
+    if(this.props.data.length) {
+      mention = <Mention
+            type="user"
+            trigger="@"
+            data={ this.props.data }
+            renderSuggestion={this.renderSuggestion}
+            onAdd={this.handleAdd}
+            onRemove={this.handleRemove} />;
+    }
     return (
       <div className="multiple-triggers">
         <h3>Multiple trigger patterns</h3>
@@ -36,18 +46,7 @@ module.exports = React.createClass({
           markup="@[__display__](__type__:__id__)"
           placeholder={"Mention people using '@'"}>
 
-          <Mention
-            type="user"
-            trigger="@"
-            data={ this.props.data }
-            renderSuggestion={this.renderSuggestion}
-            onAdd={this.handleAdd}
-            onRemove={this.handleRemove} />
-          <Mention
-            type="email"
-            trigger={emailRegex}
-            data={this.requestEmail}
-            onAdd={this.handleEmailAdd} />
+          {mention}
         </MentionsInput>
       </div>
     );
