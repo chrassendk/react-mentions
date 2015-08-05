@@ -127,8 +127,6 @@ module.exports = React.createClass({
   },
 
   renderInput: function(props) {
-    var renderSuggestions = Object.keys(this.state.suggestions).length > 0;
-    console.log(renderSuggestions);
     if (this.state.changedMention || this.props.value.length == 0 || renderSuggestions) {
       props.value = this.getPlainText();
     }
