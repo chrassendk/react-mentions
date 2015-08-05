@@ -394,7 +394,10 @@ module.exports = React.createClass({
     });
 
     // Propagate change
-    
+    if(beforeMentions == 0 && mentions.length == 0) {
+      newValue = newPlainTextValue;
+    }
+
     var handleChange = LinkedValueUtils.getOnChange(this) || emptyFunction;
     var eventMock = { target: { value: newValue } };
     handleChange.call(this, eventMock, newValue, newPlainTextValue, mentions);
