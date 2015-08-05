@@ -19,7 +19,7 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      value: "Hi @[John Doe](user:johndoe), \n\nlet's add @[joe@smoe.com](email:joe@smoe.com) and @[John Doe](user:johndoe) to this conversation... "
+      value: "Hiversation... "
     };
   },
 
