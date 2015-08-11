@@ -458,7 +458,7 @@ module.exports = React.createClass({
       this.setState({
         selectionStart: null,
         selectionEnd: null,
-        changedMention: true
+        changedMention: false
       });
     };
     this._suggestionsMouseDown = false;
@@ -1010,6 +1010,7 @@ module.exports = {
     // extract the insertion from the new plain text value
 
     var hasMentions = this.getMentions(value, markup).length > 0;
+
     var insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
 
   if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {  

@@ -10,6 +10,9 @@ var Mention = ReactMentions.Mention;
 // use first/outer capture group to extract the full entered sequence to be replaced
 // and second/inner capture group to extract search string from the match
 var emailRegex = /(([^\s@]+@[^\s@]+\.[^\s@]+))$/;
+var startWordRegex = /((\s[a-zA-Z]+))$/;
+
+
 module.exports = React.createClass({
 
   displayName: "MultipleTriggers",
@@ -44,10 +47,38 @@ module.exports = React.createClass({
             onChange={this.handleChange}
           markup="@[__display__](__type__:__id__)"
           placeholder={"Mention people using '@'"}>
+
           {mention}
+          <Mention
+            type="user"
+            trigger={startWordRegex}
+            data={ this.datla }
+            renderSuggestion={this.renderSuggestion}
+            onAdd={this.handleAdd}
+            onRemove={this.handleRemove} />
         </MentionsInput>
       </div>
     );
+  },
+
+  datla: function(e) {
+    if(e.length > 2) {
+
+      e = e.toLowerCase();
+
+      var r = [];
+
+      for(var i = 0; i < this.props.data.length; i++) {
+        var o = this.props.data[i];
+        var x = o.display.toLowerCase();
+        if(o.display.startsWith(e)) {
+          r.push(o);
+        }
+      }
+
+      console.log('r', r);
+      return r;
+    }
   },
 
   onKeyDown: function(event) {
