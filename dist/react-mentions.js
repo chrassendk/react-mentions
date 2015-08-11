@@ -458,7 +458,7 @@ module.exports = React.createClass({
       this.setState({
         selectionStart: null,
         selectionEnd: null,
-        changedMention: false
+        changedMention: true
       });
     };
     this._suggestionsMouseDown = false;
@@ -1031,11 +1031,6 @@ module.exports = {
       var lengthDelta = oldPlainTextValue.length - plainTextValue.length;
       // handling for Delete key with no range selection
       spliceEnd = Math.max(selectionEndBeforeChange, selectionStartBeforeChange + lengthDelta);
-    }
-
-    // No mentions
-    if(!hasMentions) {
-      value = plainTextValue;
     }
 
     // splice the current marked up value and insert new chars
