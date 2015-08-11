@@ -510,6 +510,7 @@ module.exports = React.createClass({
       var match = substring.match(regex);
       if(match) {
         var querySequenceStart = substring.indexOf(match[1], match.index);
+        console.log(match);
         that.queryData(match[2], child, querySequenceStart, querySequenceStart+match[1].length, plainTextValue);
       }
     });

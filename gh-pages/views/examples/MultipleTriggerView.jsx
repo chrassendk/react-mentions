@@ -10,7 +10,6 @@ var Mention = ReactMentions.Mention;
 // use first/outer capture group to extract the full entered sequence to be replaced
 // and second/inner capture group to extract search string from the match
 var emailRegex = /(([^\s@]+@[^\s@]+\.[^\s@]+))$/;
-
 module.exports = React.createClass({
 
   displayName: "MultipleTriggers",
@@ -24,7 +23,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-var mention;
+    var mention;
     if(this.props.data.length) {
       mention = <Mention
             type="user"
@@ -45,7 +44,6 @@ var mention;
             onChange={this.handleChange}
           markup="@[__display__](__type__:__id__)"
           placeholder={"Mention people using '@'"}>
-
           {mention}
         </MentionsInput>
       </div>

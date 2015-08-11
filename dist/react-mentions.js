@@ -450,7 +450,6 @@ module.exports = React.createClass({
       this.props.onKeyDown(ev);
     }
   },
-  
 
   handleBlur: function(ev) {
     // only reset selection if the mousdown happened on an element
@@ -459,7 +458,7 @@ module.exports = React.createClass({
       this.setState({
         selectionStart: null,
         selectionEnd: null,
-        changedMention: true
+        changedMention: false
       });
     };
     this._suggestionsMouseDown = false;
@@ -558,6 +557,7 @@ module.exports = React.createClass({
       var match = substring.match(regex);
       if(match) {
         var querySequenceStart = substring.indexOf(match[1], match.index);
+        console.log(match);
         that.queryData(match[2], child, querySequenceStart, querySequenceStart+match[1].length, plainTextValue);
       }
     });
