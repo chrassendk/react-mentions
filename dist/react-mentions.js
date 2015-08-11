@@ -458,7 +458,7 @@ module.exports = React.createClass({
       this.setState({
         selectionStart: null,
         selectionEnd: null,
-        changedMention: false
+        changedMention: true
       });
     };
     this._suggestionsMouseDown = false;
@@ -557,7 +557,6 @@ module.exports = React.createClass({
       var match = substring.match(regex);
       if(match) {
         var querySequenceStart = substring.indexOf(match[1], match.index);
-        console.log(match);
         that.queryData(match[2], child, querySequenceStart, querySequenceStart+match[1].length, plainTextValue);
       }
     });
@@ -1009,6 +1008,8 @@ module.exports = {
   // guided by the textarea text selection ranges before and after the change 
   applyChangeToValue: function(value, markup, plainTextValue, selectionStartBeforeChange, selectionEndBeforeChange, selectionEndAfterChange, displayTransform) {
     // extract the insertion from the new plain text value
+
+    var hasMentions = this.getMentions(value, markup).length > 0;
     var insert = plainTextValue.slice(selectionStartBeforeChange, selectionEndAfterChange);
 
   if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {  
@@ -1029,6 +1030,11 @@ module.exports = {
       var lengthDelta = oldPlainTextValue.length - plainTextValue.length;
       // handling for Delete key with no range selection
       spliceEnd = Math.max(selectionEndBeforeChange, selectionStartBeforeChange + lengthDelta);
+    }
+
+    // No mentions
+    if(!hasMentions) {
+      value = plainTextValue;
     }
 
     // splice the current marked up value and insert new chars
