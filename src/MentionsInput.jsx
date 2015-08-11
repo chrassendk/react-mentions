@@ -403,7 +403,6 @@ module.exports = React.createClass({
       this.props.onKeyDown(ev);
     }
   },
-  
 
   handleBlur: function(ev) {
     // only reset selection if the mousdown happened on an element
@@ -412,7 +411,7 @@ module.exports = React.createClass({
       this.setState({
         selectionStart: null,
         selectionEnd: null,
-        changedMention: true
+        changedMention: false
       });
     };
     this._suggestionsMouseDown = false;
