@@ -178,12 +178,8 @@ module.exports = React.createClass({
     var renderSuggestions = Object.keys(this.state.suggestions).length > 0;
     if (this.state.changedMention || this.props.value && this.props.value.length == 0 || renderSuggestions) {
      props.value = this.getPlainText();
-     console.log('a' + this.state.changedMention , renderSuggestions, this.state.suggestions);
-    } else {
-      console.log('b');
-      props.value = this.refs.input.getDOMNode().value;
     }
-    
+
     if(!this.props.readOnly && !this.props.disabled) {
      props.onChange = this.handleChange;
      props.onSelect = this.handleSelect;
@@ -355,16 +351,21 @@ module.exports = React.createClass({
 
     var value = LinkedValueUtils.getValue(this) || "";
     
+console.log('val uti l ' )
+
     var beforeMentions = utils.getMentions(value, this.props.markup);
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
 
+console.log('val uti l ', newPlainTextValue );
     // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
-      value, this.props.markup,
+      value, 
+      this.props.markup,
       newPlainTextValue,
-      this.state.selectionStart , this.state.selectionEnd,
+      this.state.selectionStart,
+      this.state.selectionEnd,
       this.refs.input.getDOMNode().selectionEnd,
       this.props.displayTransform
     );
@@ -372,6 +373,10 @@ module.exports = React.createClass({
     // In case a mention is deleted, also adjust the new plain text value
     newPlainTextValue = utils.getPlainText(newValue, this.props.markup, this.props.displayTransform);
 
+    if(beforeMentions.length == 0 && newPlainTextValue !== this.refs.input.getDOMNode().value) {
+console.log('aaa');
+      newPlainTextValue = this.refs.input.getDOMNode().value;
+    }
     // Save current selection after change to be able to restore caret position after rerendering
     var selectionStart = this.refs.input.getDOMNode().selectionStart;
     var selectionEnd = this.refs.input.getDOMNode().selectionEnd;
@@ -395,7 +400,9 @@ module.exports = React.createClass({
     });
 
     // Propagate change
+    console.log('prop cahnge');
     if(beforeMentions == 0 && mentions.length == 0) {
+    console.log('prop cahnge 1 ' + newPlainTextValue);
       newValue = newPlainTextValue;
     }
 
@@ -1040,8 +1047,8 @@ module.exports = {
 
     // No mentions
     // if(!hasMentions) {
-    //   value = plainTextValue;
-    //}
+    //    value = plainTextValue;
+    // }
 
     // splice the current marked up value and insert new chars
     return this.spliceString(
@@ -1057,12 +1064,16 @@ module.exports = {
     var idPos = this.getPositionOfCapturingGroup(markup, "id");
     var displayPos = this.getPositionOfCapturingGroup(markup, "display");
     var typePos = this.getPositionOfCapturingGroup(markup, "type");
+
+    console.log('value', value, regex);  
     return value.replace(regex, function() {
       // first argument is the whole match, capturing groups are following
       var id = arguments[idPos+1];
       var display = arguments[displayPos+1];
       var type = arguments[typePos+1];
       if(displayTransform) display = displayTransform(id, display, type);
+
+      console.log('disalt', display);
       return display;
     });
   },

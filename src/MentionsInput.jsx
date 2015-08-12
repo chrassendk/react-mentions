@@ -303,12 +303,16 @@ module.exports = React.createClass({
     }
 
     var value = LinkedValueUtils.getValue(this) || "";
+    
+console.log('val uti l ' )
 
     var beforeMentions = utils.getMentions(value, this.props.markup);
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
-  // Derive the new value to set by applying the local change in the textarea's plain text
+
+console.log('val uti l ', newPlainTextValue );
+    // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
       value, 
       this.props.markup,
@@ -321,7 +325,9 @@ module.exports = React.createClass({
 
     // In case a mention is deleted, also adjust the new plain text value
     newPlainTextValue = utils.getPlainText(newValue, this.props.markup, this.props.displayTransform);
-    if(beforeMentions.length == 0 && newPlainTextValue != this.refs.input.getDOMNode().value) {
+
+    if(beforeMentions.length == 0 && newPlainTextValue !== this.refs.input.getDOMNode().value) {
+console.log('aaa');
       newPlainTextValue = this.refs.input.getDOMNode().value;
     }
     // Save current selection after change to be able to restore caret position after rerendering
@@ -347,7 +353,9 @@ module.exports = React.createClass({
     });
 
     // Propagate change
+    console.log('prop cahnge');
     if(beforeMentions == 0 && mentions.length == 0) {
+    console.log('prop cahnge 1 ' + newPlainTextValue);
       newValue = newPlainTextValue;
     }
 
