@@ -177,11 +177,15 @@ module.exports = React.createClass({
     
     var renderSuggestions = Object.keys(this.state.suggestions).length > 0;
     if (this.state.changedMention || this.props.value && this.props.value.length == 0 || renderSuggestions) {
-      props.value = this.getPlainText();
+     props.value = this.getPlainText();
+     console.log('a' + this.state.changedMention , renderSuggestions, this.state.suggestions);
+    } else {
+      console.log('b');
+      props.value = this.refs.input.getDOMNode().value;
     }
     
     if(!this.props.readOnly && !this.props.disabled) {
-      props.onChange = this.handleChange;
+     props.onChange = this.handleChange;
      props.onSelect = this.handleSelect;
      props.onKeyDown = this.handleKeyDown;
      props.onKeyUp = this.handleKeyUp;
@@ -196,7 +200,6 @@ module.exports = React.createClass({
       background: "transparent",
       font: "inherit"
     };
-
 
     style.width = "100%";
     style.bottom = 0;
@@ -458,7 +461,7 @@ module.exports = React.createClass({
       this.setState({
         selectionStart: null,
         selectionEnd: null,
-        changedMention: true
+        changedMention: false
       });
     };
     this._suggestionsMouseDown = false;
@@ -592,9 +595,11 @@ module.exports = React.createClass({
       plainTextValue: plainTextValue
     };
 
-    this.setState({
-      suggestions: utils.extend({}, this.state.suggestions, update)
-    });
+    if(suggestions.length) {
+      this.setState({
+        suggestions: utils.extend({}, this.state.suggestions, update)
+      });
+    }
   },
 
   addMention: function(suggestion, mentionDescriptor, querySequenceStart, querySequenceEnd, plainTextValue) {
@@ -1032,6 +1037,11 @@ module.exports = {
       // handling for Delete key with no range selection
       spliceEnd = Math.max(selectionEndBeforeChange, selectionStartBeforeChange + lengthDelta);
     }
+
+    // No mentions
+    // if(!hasMentions) {
+    //   value = plainTextValue;
+    //}
 
     // splice the current marked up value and insert new chars
     return this.spliceString(
