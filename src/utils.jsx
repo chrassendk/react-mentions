@@ -258,16 +258,13 @@ module.exports = {
     var idPos = this.getPositionOfCapturingGroup(markup, "id");
     var displayPos = this.getPositionOfCapturingGroup(markup, "display");
     var typePos = this.getPositionOfCapturingGroup(markup, "type");
-
-    console.log('value', value, regex);  
+    
     return value.replace(regex, function() {
       // first argument is the whole match, capturing groups are following
       var id = arguments[idPos+1];
       var display = arguments[displayPos+1];
       var type = arguments[typePos+1];
       if(displayTransform) display = displayTransform(id, display, type);
-
-      console.log('disalt', display);
       return display;
     });
   },

@@ -351,14 +351,11 @@ module.exports = React.createClass({
 
     var value = LinkedValueUtils.getValue(this) || "";
     
-console.log('val uti l ' )
-
     var beforeMentions = utils.getMentions(value, this.props.markup);
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
 
-console.log('val uti l ', newPlainTextValue );
     // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
       value, 
@@ -374,7 +371,6 @@ console.log('val uti l ', newPlainTextValue );
     newPlainTextValue = utils.getPlainText(newValue, this.props.markup, this.props.displayTransform);
 
     if(beforeMentions.length == 0 && newPlainTextValue !== this.refs.input.getDOMNode().value) {
-console.log('aaa');
       newPlainTextValue = this.refs.input.getDOMNode().value;
     }
     // Save current selection after change to be able to restore caret position after rerendering
@@ -400,9 +396,7 @@ console.log('aaa');
     });
 
     // Propagate change
-    console.log('prop cahnge');
     if(beforeMentions == 0 && mentions.length == 0) {
-    console.log('prop cahnge 1 ' + newPlainTextValue);
       newValue = newPlainTextValue;
     }
 
@@ -1064,16 +1058,13 @@ module.exports = {
     var idPos = this.getPositionOfCapturingGroup(markup, "id");
     var displayPos = this.getPositionOfCapturingGroup(markup, "display");
     var typePos = this.getPositionOfCapturingGroup(markup, "type");
-
-    console.log('value', value, regex);  
+    
     return value.replace(regex, function() {
       // first argument is the whole match, capturing groups are following
       var id = arguments[idPos+1];
       var display = arguments[displayPos+1];
       var type = arguments[typePos+1];
       if(displayTransform) display = displayTransform(id, display, type);
-
-      console.log('disalt', display);
       return display;
     });
   },
