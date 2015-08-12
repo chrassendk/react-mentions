@@ -131,12 +131,8 @@ module.exports = React.createClass({
     var renderSuggestions = Object.keys(this.state.suggestions).length > 0;
     if (this.state.changedMention || this.props.value && this.props.value.length == 0 || renderSuggestions) {
      props.value = this.getPlainText();
-     console.log('a' + this.state.changedMention , renderSuggestions, this.state.suggestions);
-    } else {
-      console.log('b');
-      props.value = this.refs.input.getDOMNode().value;
     }
-    
+
     if(!this.props.readOnly && !this.props.disabled) {
      props.onChange = this.handleChange;
      props.onSelect = this.handleSelect;
@@ -307,24 +303,27 @@ module.exports = React.createClass({
     }
 
     var value = LinkedValueUtils.getValue(this) || "";
-    
+
     var beforeMentions = utils.getMentions(value, this.props.markup);
 
     var newPlainTextValue = this.refs.input.getDOMNode().value;
 
-
-    // Derive the new value to set by applying the local change in the textarea's plain text
+  // Derive the new value to set by applying the local change in the textarea's plain text
     var newValue = utils.applyChangeToValue(
-      value, this.props.markup,
+      value, 
+      this.props.markup,
       newPlainTextValue,
-      this.state.selectionStart , this.state.selectionEnd,
+      this.state.selectionStart,
+      this.state.selectionEnd,
       this.refs.input.getDOMNode().selectionEnd,
       this.props.displayTransform
     );
 
     // In case a mention is deleted, also adjust the new plain text value
     newPlainTextValue = utils.getPlainText(newValue, this.props.markup, this.props.displayTransform);
-
+    if(beforeMentions.length == 0 && newPlainTextValue != this.refs.input.getDOMNode().value) {
+      newPlainTextValue = this.refs.input.getDOMNode().value;
+    }
     // Save current selection after change to be able to restore caret position after rerendering
     var selectionStart = this.refs.input.getDOMNode().selectionStart;
     var selectionEnd = this.refs.input.getDOMNode().selectionEnd;

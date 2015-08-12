@@ -241,8 +241,8 @@ module.exports = {
 
     // No mentions
     // if(!hasMentions) {
-    //   value = plainTextValue;
-    //}
+    //    value = plainTextValue;
+    // }
 
     // splice the current marked up value and insert new chars
     return this.spliceString(
