@@ -176,9 +176,9 @@ module.exports = React.createClass({
   renderInput: function(props) {
     
     var renderSuggestions = Object.keys(this.state.suggestions).length > 0;
-    //if (this.state.changedMention || this.props.value && this.props.value.length == 0 || renderSuggestions) {
+    if (this.state.changedMention || this.props.value && this.props.value.length == 0 || renderSuggestions) {
      props.value = this.getPlainText();
-    //}
+    }
 
     if(!this.props.readOnly && !this.props.disabled) {
      props.onChange = this.handleChange;
@@ -462,7 +462,7 @@ module.exports = React.createClass({
       this.setState({
         selectionStart: null,
         selectionEnd: null,
-        changedMention: false
+        changedMention: true
       });
     };
     this._suggestionsMouseDown = false;
