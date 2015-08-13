@@ -12,6 +12,10 @@ var users = [
     display: "John Doe"
   },
   {
+    id: "johndoe",
+    display: "verylong"
+  },
+  {
     id: "joesmoe",
     display: "Joe Smoe"
   }
