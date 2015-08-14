@@ -470,7 +470,7 @@ module.exports = React.createClass({
       this.setState({
         selectionStart: null,
         selectionEnd: null,
-        changedMention: false
+        changedMention: true
       });
     };
     this._suggestionsMouseDown = false;
