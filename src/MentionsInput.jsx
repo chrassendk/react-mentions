@@ -104,7 +104,9 @@ module.exports = React.createClass({
 
   componentWillReceiveProps: function(nextProps) {
     if (nextProps.convoId !== this.props.convoId) {
-      console.log('next props + ');
+      this.setState({
+        changedMention: true
+      });
     }
   },
 
