@@ -21,12 +21,15 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      value: "Hiversation... "
+      value: "pl[l[plp[l... ",
+      convoId: 0
     };
   },
 
   render: function() {
     var mention;
+    console.log('state');
+    console.log('state', this.state.convoId);
     if(this.props.data.length) {
       mention = <Mention
             type="user"
@@ -40,9 +43,12 @@ module.exports = React.createClass({
       <div className="multiple-triggers">
         <h3>Multiple trigger patterns</h3>
         <p>Mention people using '@' + username or type an email address</p>
+  llllll
+        <div onclick={this.changeProp}>Chagne prop</div>
 
         <MentionsInput
           value={this.state.value}
+          convoId={this.state.convoId}
             onKeyDown={this.onKeyDown}
             onChange={this.handleChange}
           markup="@[__display__](__type__:__id__)"
@@ -59,6 +65,13 @@ module.exports = React.createClass({
         </MentionsInput>
       </div>
     );
+  },
+
+  changeProp: function() {
+    alert('s');
+    this.setState({
+      convoId: 100
+    });
   },
 
   datla: function(e) {

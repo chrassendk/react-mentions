@@ -102,6 +102,12 @@ module.exports = React.createClass({
     };
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.convoId !== this.props.convoId) {
+      console.log('next props + ');
+    }
+  },
+
   render: function() {
     var {
       singleLine,
