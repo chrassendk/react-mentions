@@ -10,7 +10,7 @@ var Mention = ReactMentions.Mention;
 // use first/outer capture group to extract the full entered sequence to be replaced
 // and second/inner capture group to extract search string from the match
 var emailRegex = /(([^\s@]+@[^\s@]+\.[^\s@]+))$/;
-var startWordRegex = /((\s[a-zA-Z]+))$/;
+var wordBeginRegex = /(?:^|\s)((\b[a-zA-Z]+))$/;
 
 
 module.exports = React.createClass({
@@ -57,18 +57,15 @@ module.exports = React.createClass({
           {mention}
           <Mention
             type="user"
-            trigger={startWordRegex}
+            trigger={wordBeginRegex}
             data={ this.datla }
-            renderSuggestion={this.renderSuggestion}
-            onAdd={this.handleAdd}
-            onRemove={this.handleRemove} />
+            renderSuggestion={this.renderSuggestion}/>
         </MentionsInput>
       </div>
     );
   },
 
   changeProp: function() {
-    alert('s');
     this.setState({
       convoId: 100
     });
@@ -89,7 +86,6 @@ module.exports = React.createClass({
         }
       }
 
-      console.log('r', r);
       return r;
     }
   },
