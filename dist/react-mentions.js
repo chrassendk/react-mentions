@@ -150,7 +150,7 @@ module.exports = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
-    if (this.props && nextProps && snextProps.convoId !== this.props.convoId) {
+    if (this.props && nextProps && nextProps.convoId !== this.props.convoId) {
       this.setState({
         changedMention: true
       });
